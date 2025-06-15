@@ -24,6 +24,7 @@ while True:
                     input("You take a hit and fall to the ground, defeated.")
                     input("As your lifeblood pools on the forest floor, you feel the warmth of the tree's marking fade away...")
                     input("YOU DIED.")
+                    exit()
                 elif qtime1 == "dodge":
                     input("In a burst of combative brilliance, you notice the beast tensing, and roll swiftly to the side as the beast lunges at you, narrowly avoiding its deadly claws!")
                     input("The beast's claws tear through the space in which you were standing, and get get stuck in the tree behind you!")
@@ -31,6 +32,7 @@ while True:
                     input("before you can do anything, you feel a wrenching sense of loss, the warmth of the tree's marking now gone.")
                     input("Collapsing to your knees, you notice the gaps between your heartbeats growing longer, and the world around you fading to black.")
                     input("YOU DIED.")
+                    exit()
                 elif qtime1 == "run":
                     input("You turn and sprint down the path, leaving the strange beast behind. You think that you have managed to escape, but you know it won't be long before it finds you again.")
                     input("As you run further and further, you eventually come to a small village. The villagers take you in and help you recover from your ordeal.")
@@ -63,7 +65,7 @@ while True:
 
 #   If Action: display actions
     if step1 == "action":
-        step2 = input("Whick action do you want to use? (Punch/Item/Back): ").strip().lower()
+        step2 = input("Which action do you want to use? (Item/Back): ").strip().lower()
 
 #   If Inventory: display inventory
     if step1 == "inventory":
