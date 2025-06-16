@@ -41,10 +41,13 @@ while True:
                     input("YOU LIVED!")
                     exit()
             elif step2 == "action":
-                step3 = input("Which action do you want to use? (Back)").strip().lower()
+                step3 = input("Which action do you want to use? (None/Back)").strip().lower()
                 if step3 == "back":
                     input("Returning to previous choice...")
                     continue        
+                elif step3 == "none":
+                    input("You have no actions to take.")
+                    continue
             elif step2 == "inventory":
                 input("you take a look in your pockets")
                 input("Your inventory is empty. You have nothing to use.")
@@ -62,20 +65,37 @@ while True:
                 if step3 == "back":
                     input("Restarting game...")
                     continue
+                elif step3 in ["north", "south", "east", "west"]:
+                    input("You move {} down the path, leaving the strange tree behind. You feel a sense of unease as you leave the marking behind, but you know that you must keep moving.") .format(step3)
+                    input("As you walk down the path, you feel a strange crawling sensation on the back of your neck, as if something is watching you. You quicken your pace, hoping to leave the forest behind.")
+                    input("out of the corner of your vision, your eyes are drawn to a tree with a strange marking on it, similar to the one you saw before.")
+                    input("You feel a strange compulsion to touch it, but you resist the urge and keep moving.")
+                    input("Now running, you ocasionally glance at a tree, and every time you do, you see the strange marking on it, identical to the one you saw before.")
+                    input("Occasionally hearing growls and howls from behind you continue to run, never seeming to ecsape the presumably immense forest.")
+                    input("Sometimes, you star feeling too tired to run anymore, but then you see the marking on the tree, and you recieve a strange burst of energy, allowing you to contiue running.")
+                    input("For eternity, you run. You can no longer think of anything but running, and the mark.")
+                    input("YOU ARE LOST.")
 
 #   If Action: display actions
     if step1 == "action":
         step2 = input("Which action do you want to use? (Item/Back): ").strip().lower()
+        if step2 == "item":
+            input("You have no items to use.")
+        elif step2 == "back":
+            input("Returning to previous choice...")
+            continue
 
 #   If Inventory: display inventory
     if step1 == "inventory":
-        input("your inventory")
+        input("You check your pockets, but there is nothing in your inventory.")
+        continue
 #       Use Item? Drop Item? or Back?
 
 #   If Move: display directions
     if step1 == "move":   
 #       North? South? East? West? or Back?
-        step2 = input("direction")
+        step2 = input("Please choose a direction to move (North/South/East/West/Back): ").strip().lower()
+        
 #   If Back: exit game
     if step1 == "back":
         input("Restarting game...")
