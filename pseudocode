@@ -1,0 +1,6 @@
+print welcome
+print starting scene
+input step1(investigate/action/inventory/move/back)
+if step1(investigate)
+    print some detail
+    input step2(investigate/action/inventory/move/back)
