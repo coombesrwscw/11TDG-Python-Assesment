@@ -1,17 +1,11 @@
-#psudocode:
-#code:
+
 while True:
-#Welcome!
     input("Welcome to my text adventure game! I made this game for my Python assessment. I hope you enjoy it!")
-#scene
     input("You find yourself in a dark forest. The trees are tall and the path is narrow. You can hear the sound of leaves rustling in the wind.")
-#Investigate? Action? Inventory? Move? or Back?
     step1 = input("What would you like to do? (Investigate/Action/Inventory/Back/Move): ").strip().lower()
-#   If Investigate: further detail scene/objects
     if step1 == "investigate":
         while True:
             input("Looking around, you notice that one of the trees has a strange marking on it.")
-#       Investigate? Action? Inventory? Move? or Back?
     
             step2 = input("What would you like to do? (Investigate/Action/Inventory/Back/Move): ").strip().lower()
             if step2 == "investigate":
@@ -76,7 +70,6 @@ while True:
                     input("For eternity, you run. You can no longer think of anything but running, and the mark.")
                     input("YOU ARE LOST.")
 
-#   If Action: display actions
     if step1 == "action":
         step2 = input("Which action do you want to use? (Item/Back): ").strip().lower()
         if step2 == "item":
@@ -85,18 +78,13 @@ while True:
             input("Returning to previous choice...")
             continue
 
-#   If Inventory: display inventory
     if step1 == "inventory":
         input("You check your pockets, but there is nothing in your inventory.")
         continue
-#       Use Item? Drop Item? or Back?
 
-#   If Move: display directions
     if step1 == "move":   
-#       North? South? East? West? or Back?
         step2 = input("Please choose a direction to move (North/South/East/West/Back): ").strip().lower()
-        
-#   If Back: exit game
+
     if step1 == "back":
         input("Restarting game...")
         continue

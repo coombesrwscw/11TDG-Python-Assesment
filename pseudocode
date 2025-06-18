@@ -4,3 +4,45 @@ input step1(investigate/action/inventory/move/back)
 if step1(investigate)
     print some detail
     input step2(investigate/action/inventory/move/back)
+    if step2(investigate)
+        print more detail
+        input step3(attack/dodge/run)
+        if step3(attack)
+            print death scene
+            exit
+        elif step3(dodge)
+            print dodge scene
+            input step4(attack/dodge/run)
+            if step4(attack)
+                print death scene
+                exit
+            elif step4(dodge)
+                print dodge scene
+                exit
+            elif step4(run)
+                print run scene
+                exit
+        elif step3(run)
+            print run scene
+            exit
+    elif step2(action)
+        input step3(action1/action2/back)
+        if step3(back)
+            continue
+        elif step3(action1/action2)
+            print action result
+    elif step2(inventory)
+        print inventory details
+        input step3(use item/back)
+        if step3(use item)
+            print no items to use
+        elif step3(back)
+            continue
+    elif step2(move)
+        input step3(direction/back)
+        if step3(back)
+            continue
+        elif step3(direction)
+            print move result
+    elif step2(back)
+        continue
