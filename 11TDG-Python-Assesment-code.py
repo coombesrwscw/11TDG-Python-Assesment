@@ -7,7 +7,7 @@ while True:
         if step1 == "investigate":
             while True:
                 input("Looking around, you notice that one of the trees has a strange marking on it.")
-    
+   
                 step2 = input("What would you like to do? (Investigate/Action/Inventory/Back/Move): ").strip().lower()
                 if step2 == "investigate":
                     input("You approach the tree and see that the marking is a symbol of some kind. Touching it, you realize it is strangely warm...")
@@ -65,11 +65,12 @@ while True:
                         input("As you walk down the path, you feel a strange crawling sensation on the back of your neck, as if something is watching you. You quicken your pace, hoping to leave the forest behind.")
                         input("out of the corner of your vision, your eyes are drawn to a tree with a strange marking on it, similar to the one you saw before.")
                         input("You feel a strange compulsion to touch it, but you resist the urge and keep moving.")
-                        input("Now running, you ocasionally glance at a tree, and every time you do, you see the strange marking on it, identical to the one you saw before.")
-                        input("Occasionally hearing growls and howls from behind you continue to run, never seeming to ecsape the presumably immense forest.")
-                        input("Sometimes, you star feeling too tired to run anymore, but then you see the marking on the tree, and you recieve a strange burst of energy, allowing you to contiue running.")
+                        input("Now running, you occasionally glance at a tree, and every time you do, you see the strange marking on it, identical to the one you saw before.")
+                        input("Occasionally hearing growls and howls from behind you continue to run, never seeming to escape the presumably immense forest.")
+                        input("Sometimes, you start feeling too tired to run anymore, but then you see the marking on the tree, and you receive a strange burst of energy, allowing you to continue running.")
                         input("For eternity, you run. You can no longer think of anything but running, and the mark.")
                         input("YOU ARE LOST.")
+
 
         if step1 == "action":
             step2 = input("Which action do you want to use? (Item/Back): ").strip().lower()
@@ -79,12 +80,15 @@ while True:
                 input("Returning to previous choice...")
                 continue
 
+
         if step1 == "inventory":
             input("You check your pockets, but there is nothing in your inventory.")
             continue
 
-        if step1 == "move":   
+
+        if step1 == "move":  
             step2 = input("Please choose a direction to move (North/South/East/West/Back): ").strip().lower()
+
 
         if step1 == "back":
             input("Restarting game...")
