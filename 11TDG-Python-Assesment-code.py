@@ -1,13 +1,14 @@
-
+#loops are there so that the player can go back via the 'continue' after selecting the back option
 while True:
-    input("Welcome to my text adventure game! I made this game for my Python assessment. I hope you enjoy it!")
+    #inputs are used so that the player has to press enter after each line, slowing down the pace and letting them properly read the text
+    input("Press ENTER to see the next line of text.")
+    input("Welcome to my text adventure game! I made this game for my Python assessment. It's mostly just a demo of the skills I have learnt, but I hope you still enjoy it!")
     while True:
         input("You find yourself in a dark forest. The trees are tall and the path is narrow. You can hear the sound of leaves rustling in the wind.")
         step1 = input("What would you like to do? (Investigate/Action/Inventory/Back/Move): ").strip().lower()
         if step1 == "investigate":
             while True:
                 input("Looking around, you notice that one of the trees has a strange marking on it.")
-   
                 step2 = input("What would you like to do? (Investigate/Action/Inventory/Back/Move): ").strip().lower()
                 if step2 == "investigate":
                     input("You approach the tree and see that the marking is a symbol of some kind. Touching it, you realize it is strangely warm...")
@@ -18,7 +19,8 @@ while True:
                         input("Full of false pride, you raise a bare fist and swing at the strange creature, but it easily dodges your feeble attempts at rebuff, swiping at you with its claws!")
                         input("You take a hit and fall to the ground, defeated.")
                         input("As your lifeblood pools on the forest floor, you feel the warmth of the tree's marking fade away...")
-                        input("YOU DIED.")
+                        input("YOU DIED.") 
+                        #exits are used to end the game after a succecsful or failed run
                         exit()
                     elif qtime1 == "dodge":
                         input("In a burst of combative brilliance, you notice the beast tensing, and roll swiftly to the side as the beast lunges at you, narrowly avoiding its deadly claws!")
@@ -35,6 +37,7 @@ while True:
                         input("With this firm belief, you decide to never return to the forest again, and live out the rest of your days in peace.")
                         input("YOU LIVED!")
                         exit()
+                #actions and inventory haven't been properly implemented because as I said, this is mostly just an extremly simple demo
                 elif step2 == "action":
                     step3 = input("Which action do you want to use? (None/Back)").strip().lower()
                     if step3 == "back":
@@ -70,7 +73,8 @@ while True:
                         input("Sometimes, you start feeling too tired to run anymore, but then you see the marking on the tree, and you receive a strange burst of energy, allowing you to continue running.")
                         input("For eternity, you run. You can no longer think of anything but running, and the mark.")
                         input("YOU ARE LOST.")
-
+                        exit()
+                        #I was tempted to make different endings for each direction, but I decided against it, as it would have been too much work for such a simple game
 
         if step1 == "action":
             step2 = input("Which action do you want to use? (Item/Back): ").strip().lower()
@@ -80,15 +84,12 @@ while True:
                 input("Returning to previous choice...")
                 continue
 
-
         if step1 == "inventory":
             input("You check your pockets, but there is nothing in your inventory.")
             continue
 
-
         if step1 == "move":  
             step2 = input("Please choose a direction to move (North/South/East/West/Back): ").strip().lower()
-
 
         if step1 == "back":
             input("Restarting game...")
