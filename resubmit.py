@@ -3,6 +3,10 @@
 inventory=[]
 equiplist=[]
 itemlist=["sword", "shield", "potion", "boot"]
+# enemies
+enemies=["goblin"=={"name"=="Goblin", "atk"==1, "blk"==0, "hel"==5, "dmg"==1}, "orc"=={"name"=="Orc", "atk"==2, "blk"==1, "hel"==10, "dmg"==2},]
+goblin={"name": "Goblin", "atk": 1, "blk": 0, "hel": 5, "dmg": 1}
+
 import random
 def applyequips():
     global atk, blk, agi, hel, dmg
@@ -19,6 +23,35 @@ def applyequips():
 def invalid_input():
     input("Invalid input. Please reinput your choice.")
     return
+def playerturn():
+    playerturn=input("Your turn! Will you attack/block/escape?")
+    if playerturn == "attack":
+            if random.randint(1, 3)+(enemies[goblin["blk"]]) <= atk:
+                input("You hit the goblin for {} damage!".format(dmg))
+                goblin["hel"] -= dmg
+                if enemies[goblin["hel"]] <= 0:
+                    input("The goblin has been defeated!")
+                else:
+                    input("The goblin has {} health remaining.".format(enemies[goblin["hel"]]))   
+            else:
+                input("You missed!")
+    elif playerturn == "block":
+            blk+=1
+            input("You brace for the goblin's attack, increasing your block chance!")
+    elif playerturn == "escape":
+            if random.randint(1, 3)+(goblin["agi"]) <= agi:
+                input("You successfully escaped the goblin!")
+                return
+            else:
+                input("You failed to escape!")
+
+def fight():
+    input("Something appears in front of you!")
+    enemy=random.choices(enemies, weights=[10,6], k=1)[0]
+    input("it's a {}!".format(enemy))
+    if enemy == "goblin":
+        goblinfight()
+
 #stats (atk=attack success chance, blk=block success chance, agi=escape success chance, hp=health points, dmg=damage)
 atk=1
 blk=1
@@ -55,4 +88,6 @@ while True:
         invalid_input()
 
 applyequips()
-input("Suddenly, what looks like a little green child jumps out of the bush! ")
+fights=random.randint(1, 15)
+for i in range(fights):
+    fight()

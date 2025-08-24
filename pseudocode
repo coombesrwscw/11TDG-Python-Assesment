@@ -1,3 +1,7 @@
+#new pseudocode
+
+
+#original psudocode
 print welcome
 print starting scene
 input step1(investigate/action/inventory/move/back)
