@@ -4,8 +4,7 @@ inventory=[]
 equiplist=[]
 itemlist=["sword", "shield", "potion", "boot"]
 # enemies
-enemies=[{"name": "Goblin", "atk": 1, "blk": 0, "hel": 5, "dmg": 1}, {"name": "Orc", "atk": 2, "blk": 1, "hel": 10, "dmg": 2},]
-goblin={"name": "Goblin", "atk": 1, "blk": 0, "hel": 5, "dmg": 1}
+enemies=[{"name": "Goblin", "atk": 1, "blk": 0, "hel": 5, "dmg": 1, "agi":1}, {"name": "Orc", "atk": 2, "blk": 1, "hel": 10, "dmg": 2, "agi":0},]
 
 import random
 def applyequips():
@@ -31,21 +30,23 @@ def fight():
     input("it's a {}!".format(enemy["name"]))
     while enemy["hel"] > 0:
         playerturn()
+        enemyturn()
+    enemy={}
+# note to self: fix enemy so that thier deaths aren't global
 
 def playerturn():
     playerturn=input("Your turn! Will you attack/block/escape?")
     if playerturn == "attack":
-            # note to self: fix dmg display
-            if random.randint(-1, 1)+(enemy["blk"]) <= atk:
-                input("You hit the {} for {} damage!".format(enemy["name"], dmg))
-                enemy["hel"] -= dmg+(0, 1)
-                if enemy["hel"] <= 0:
-                    input("The {} has been defeated!".format(enemy["name"]))
-                else:
-                    input("The {} has {} health remaining.".format(enemy["name"], enemy["hel"]))   
+            enemyblkcheck=random.randint(-1, 1)+(enemy["blk"])
+            if enemyblkcheck <= atk:
+                dmgcheck=random.randint(0, 1)+(dmg)
+                enemy["hel"] -= (dmgcheck)
+                input("You hit the {} for {} damage!".format(enemy["name"], dmgcheck))
+                input("The {} has {} health remaining.".format(enemy["name"], enemy["hel"]))   
             else:
                 input("You missed!")
     elif playerturn == "block":
+            global blk
             blk+=1
             input("You brace for the {}'s attack, increasing your block chance!".format(enemy["name"]))
     elif playerturn == "escape":
@@ -54,6 +55,35 @@ def playerturn():
                 return
             else:
                 input("You failed to escape!")
+    if enemy["hel"] <= 0:
+        input("The {} has been defeated!".format(enemy["name"]))
+
+def enemyturn():
+    if enemy["hel"] > 1:
+        enemyturn=random.choices(["attack", "block"],weights=[10,1])
+        if enemyturn == "attack":
+            blkcheck=random.randint(-1, 1)+(blk)
+            if blkcheck <= enemy["atk"]:
+                global hel
+                enemydmgcheck=random.randint(0, 1)+(enemy["dmg"])
+                hel -= (enemydmgcheck)
+                input("The {} hit you for {} damage!".format(enemy["name"], enemydmgcheck))
+            if hel <= 0:
+                input("You have been defeated by the {}...".format(enemy["name"]))
+                input("Game Over. Press ENTER/RETURN to exit.")
+                exit()
+            else:
+                input("The {} missed!".format(enemy["name"]))
+        elif enemyturn == "block":
+            enemy["blk"]+=1
+            input("The {} braces for your attack, increasing its block chance!".format(enemy["name"]))
+    elif enemy["hel"] == 1:
+        input("The {} is trying to escape!".format(enemy["name"]))
+        if random.randint(-3, 1)+(enemy["agi"]) <= agi:
+            input("You successfully stopped the {} from escaping!".format(enemy["name"]))
+        else:
+            input("The {} escaped!".format(enemy["name"]))
+            enemy["hel"] = 0
 
 # player stats (atk=attack success chance, blk=block success chance, agi=escape success chance, hp=health points, dmg=damage)
 atk=1
