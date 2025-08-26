@@ -7,6 +7,7 @@ itemlist=["sword", "shield", "potion", "boot"]
 enemies=[{"name": "Goblin", "atk": 1, "blk": 0, "hel": 5, "dmg": 1, "agi":1}, {"name": "Orc", "atk": 2, "blk": 1, "hel": 10, "dmg": 2, "agi":0},]
 
 import random
+
 def applyequips():
     global atk, blk, agi, hel, dmg
     for item in equiplist:
@@ -19,20 +20,50 @@ def applyequips():
             hel += 5
         elif item == "boot":
             agi += 1
+
 def invalid_input():
     input("Invalid input. Please reinput your choice.")
     return
 
+def grantitem():
+    global inventory
+    global equiplist
+    if enemy["hel"] <= 0:
+        if enemy["name"] == "Goblin":
+            itemchance=random.choices([True, False], weights=[7,3], k=1)[0]
+        elif enemy["name"] == "Orc":
+            itemchance=random.choices([True, False], weights=[10,3], k=1)[0]
+    elif enemy["hel"] > 0:
+        if enemy["name"] == "Goblin":
+            itemchance=random.choices([True, False], weights=[3,7], k=1)[0]
+        elif enemy["name"] == "Orc":
+            itemchance=random.choices([True, False], weights=[5,8], k=1)[0]
+    if itemchance == True:
+        newitem=random.choices(itemlist, weights=[0.5, 0.3, 0.1, 0.1], k=1)[0]
+        input("You found a {} on the defeated enemy!".format(newitem))
+        inventory.append(newitem)
+        step3 = input("Would you like to equip it? (yes/no): ").strip().lower()
+        if step3 == "yes":
+            equiplist.append(newitem)
+            input("You equip the {}.".format(equiplist[-1]))
+            applyequips()
+        elif step3 == "no":
+            input("You leave the {} in your inventory.".format(newitem))
+            inventory.append(newitem)
+        else:
+            invalid_input()
+    else:
+        input("The enemy had no items.")
+
 def fight():
     global enemy
     input("Something appears in front of you!")
-    enemy=random.choices(enemies, weights=[10,6], k=1)[0]
+    enemychoice=random.choices(enemies, weights=[10,6], k=1)[0]
+    enemy=enemychoice.copy()
     input("it's a {}!".format(enemy["name"]))
     while enemy["hel"] > 0:
         playerturn()
         enemyturn()
-    enemy={}
-# note to self: fix enemy so that thier deaths aren't global
 
 def playerturn():
     playerturn=input("Your turn! Will you attack/block/escape?")
@@ -57,6 +88,7 @@ def playerturn():
                 input("You failed to escape!")
     if enemy["hel"] <= 0:
         input("The {} has been defeated!".format(enemy["name"]))
+        grantitem()
 
 def enemyturn():
     if enemy["hel"] > 1:
@@ -83,7 +115,6 @@ def enemyturn():
             input("You successfully stopped the {} from escaping!".format(enemy["name"]))
         else:
             input("The {} escaped!".format(enemy["name"]))
-            enemy["hel"] = 0
 
 # player stats (atk=attack success chance, blk=block success chance, agi=escape success chance, hp=health points, dmg=damage)
 atk=1
