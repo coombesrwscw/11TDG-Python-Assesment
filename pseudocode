@@ -1,5 +1,56 @@
 #new pseudocode
+start game
+initialize player stats: attack, block, agility, health, damage
+initialize empty inventory and equipment lists
+initialize possible items
+initialize list of enemy types
 
+display game introduction
+
+ask player if they want to look around
+if yes:
+    find a random item
+    ask if they want to equip it
+    if yes: add to equipment
+    else: leave item
+else:
+    wait until an enemy approaches
+
+apply equipment bonuses to player stats
+
+decide number of fights randomly
+
+for each fight:
+    choose a random enemy
+    display enemy encounter
+
+    while enemy health > 0:
+        player turn:
+            ask player to attack, block, or escape
+            if attack: calculate hit and damage enemy
+            if block: increase block chance
+            if escape: calculate success, if success then leave fight
+
+        if enemy health <= 0:
+            display enemy defeated
+            determine if enemy drops item
+            if item dropped:
+                ask if player wants to equip or keep it
+            break from fight
+
+        enemy turn:
+            if enemy health > 1:
+                randomly attack or block
+                if attack: calculate hit and damage player
+                if block: increase enemy block
+            else if enemy health == 1:
+                enemy may try to escape
+
+        if player health <= 0:
+            display game over
+            end game
+
+end game after all fights
 
 #original psudocode
 print welcome

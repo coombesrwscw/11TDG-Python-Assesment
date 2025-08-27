@@ -3,6 +3,7 @@
 inventory=[]
 equiplist=[]
 itemlist=["sword", "shield", "potion", "boot"]
+eventtypes=["fight", "freeitem", "camp",]
 # enemies
 enemies=[{"name": "Goblin", "atk": 1, "blk": 0, "hel": 5, "dmg": 1, "agi":1}, {"name": "Orc", "atk": 2, "blk": 1, "hel": 10, "dmg": 2, "agi":0},]
 
@@ -42,22 +43,25 @@ def grantitem():
         newitem=random.choices(itemlist, weights=[0.5, 0.3, 0.1, 0.1], k=1)[0]
         input("You found a {} on the defeated enemy!".format(newitem))
         inventory.append(newitem)
-        step3 = input("Would you like to equip it? (yes/no): ").strip().lower()
-        if step3 == "yes":
-            equiplist.append(newitem)
-            input("You equip the {}.".format(equiplist[-1]))
-            applyequips()
-        elif step3 == "no":
-            input("You leave the {} in your inventory.".format(newitem))
-            inventory.append(newitem)
-        else:
-            invalid_input()
+        while True:
+            step3 = input("Would you like to equip it? (yes/no): ").strip().lower()
+            if step3 == "yes":
+                equiplist.append(newitem)
+                input("You equip the {}.".format(equiplist[-1]))
+                applyequips()
+                break
+            elif step3 == "no":
+                input("You leave the {} in your inventory.".format(newitem))
+                inventory.append(newitem)
+                break
+            else:
+                invalid_input()
     else:
         input("The enemy had no items.")
 
 def fight():
     global enemy
-    input("Something appears in front of you!")
+    input("...And something jumps out of the bushes!")
     enemychoice=random.choices(enemies, weights=[10,6], k=1)[0]
     enemy=enemychoice.copy()
     input("it's a {}!".format(enemy["name"]))
@@ -66,8 +70,9 @@ def fight():
         enemyturn()
 
 def playerturn():
-    playerturn=input("Your turn! Will you attack/block/escape?")
-    if playerturn == "attack":
+    while True:
+        playerturn=input("Your turn! Will you attack/block/escape?")
+        if playerturn == "attack":
             enemyblkcheck=random.randint(-1, 1)+(enemy["blk"])
             if enemyblkcheck <= atk:
                 dmgcheck=random.randint(0, 1)+(dmg)
@@ -76,19 +81,23 @@ def playerturn():
                 input("The {} has {} health remaining.".format(enemy["name"], enemy["hel"]))   
             else:
                 input("You missed!")
-    elif playerturn == "block":
+            break
+        elif playerturn == "block":
             global blk
             blk+=1
             input("You brace for the {}'s attack, increasing your block chance!".format(enemy["name"]))
-    elif playerturn == "escape":
+            break
+        elif playerturn == "escape":
             if random.randint(-1, 1)+(enemy["agi"]) <= agi:
                 input("You successfully escaped the {}!".format(enemy["name"]))
                 return
             else:
                 input("You failed to escape!")
-    if enemy["hel"] <= 0:
-        input("The {} has been defeated!".format(enemy["name"]))
-        grantitem()
+            break
+        if enemy["hel"] <= 0:
+            input("The {} has been defeated!".format(enemy["name"]))
+            grantitem()
+            break
 
 def enemyturn():
     if enemy["hel"] > 1:
@@ -127,6 +136,12 @@ dmg=1
 input("Hello, this is a text and probability based fighting game for my python assesment. (press ENTER/RETURN to continue)")
 input("Light. That is all you see, as your mind slowly surfaces from the depths of REM sleep.")
 input("Sitting up, you see that you are seemingly alone in an empty forest.")
+input("Recognizing your surroundings, you remember that you were on your way to a nearby village when bandits ambushed you and knocked you out.")
+input("If you can get to the village, you can get help to defeat the bandits!")
+input("...After a bit more sitting, perhaps...")
+input("...")
+input(".....")
+input("..........")
 while True:    
     step1 = input("would you like to take a look around? (yes/no): ").strip().lower()
     if step1 == "yes":
@@ -136,22 +151,61 @@ while True:
         if step2 == "yes":
             equiplist.append(startitem)
             input("You equip the {}.".format(equiplist[-1]))
-            break
-
         elif step2 == "no":
             input("You leave the {} on the ground.".format(startitem))
-            break
-
         input("looking around a bit more, you notice that some of the nearby bush is rustling strangely.")
-
+        break
     elif step1 == "no":
         input("Continuing to sit for a while, you eventually hear a loud rustling in the bushes nearby.")
         break
-
     else:
         invalid_input()
+fight()
 
 applyequips()
-fights=random.randint(1, 15)
-for i in range(fights):
-    fight()
+events=random.randint(1, 15)
+for i in range(events):
+    eventtype=random.choices(eventtypes, weights=[10,4,4], k=1)[0]
+    if eventtype == "fight":
+        fight()
+        input("After defeating your enemy, you continue on your way.")
+    if eventtype == "freeitem":
+        freeitem=random.choices(itemlist, weights=[0.5, 0.3, 0.1, 0.1], k=1)[0]
+        input("...And you find a {} lying on the ground in the exact centre of the clearing.".format(freeitem))
+        while True:
+            step4 = input("Equip? (yes/no): ").strip().lower()
+            if step4 == "yes":
+                equiplist.append(freeitem)
+                input("You equip the {}.".format(equiplist[-1]))
+                applyequips()
+            elif step4 == "no":
+                input("You leave the {} on the ground.".format(freeitem))
+            else:
+                invalid_input()
+            input("You continue on your way.")
+    if eventtype == "camp":
+        input("...And you find a safe clearing to rest in for a while, with a burnt out firepit in the centre.")
+        while True:
+            firepit = input("Do you want to try lighting the firepit? (yes/no)")
+            if firepit == "yes":
+                fire=random.randint(1, 10)
+                if fire >= 4:
+                    hel += 5
+                    input("...And you succeed in lighting the firepit!")
+                    input("You feel refreshed, and gain 5 health!")
+                    break
+                else:
+                    input("...But you don't really succeed, and eventually get a splinter from the firewood, so you give up.")
+                    break
+            elif firepit == "no":
+                input("You decide not to try lighting the firepit.")
+                break
+            else:
+                invalid_input()
+        input("After resting for a while, you continue on your way.")
+    applyequips()
+    input("You have {} health remaining.".format(hel))
+    input("You have {} events remaining before you reach the village.".format(events-(i+1)))
+    input("After this check of yourself, and where you are, you begin moving again.")
+    input("After a while more walking, you come across a clearing...")
+
