@@ -9,6 +9,7 @@ enemies=[{"name": "Goblin", "atk": 1, "blk": 0, "hel": 5, "dmg": 1, "agi":1}, {"
 
 import random
 
+# once an item is equipped, i can use this function to apply its effects to player stats
 def applyequips():
     global atk, blk, agi, hel, dmg
     for item in equiplist:
@@ -22,23 +23,28 @@ def applyequips():
         elif item == "boot":
             agi += 1
 
+# function to be called when input is invalid, needs while true loop around question and breaks after successful inputs to work properly
 def invalid_input():
     input("Invalid input. Please reinput your choice.")
     return
 
+# function to give player a chance to get an item after defeating an enemy
 def grantitem():
     global inventory
     global equiplist
-    if enemy["hel"] <= 0:
-        if enemy["name"] == "Goblin":
-            itemchance=random.choices([True, False], weights=[7,3], k=1)[0]
-        elif enemy["name"] == "Orc":
-            itemchance=random.choices([True, False], weights=[10,3], k=1)[0]
-    elif enemy["hel"] > 0:
-        if enemy["name"] == "Goblin":
-            itemchance=random.choices([True, False], weights=[3,7], k=1)[0]
-        elif enemy["name"] == "Orc":
-            itemchance=random.choices([True, False], weights=[5,8], k=1)[0]
+    if enemy["name"] == ("Goblin","Orc",):
+        if enemy["hel"] <= 0:
+            if enemy["name"] == "Goblin":
+                itemchance=random.choices([True, False], weights=[7,3], k=1)[0]
+            elif enemy["name"] == "Orc":
+                itemchance=random.choices([True, False], weights=[10,3], k=1)[0]
+        elif enemy["hel"] > 0:
+            if enemy["name"] == "Goblin":
+                itemchance=random.choices([True, False], weights=[3,7], k=1)[0]
+            elif enemy["name"] == "Orc":
+                itemchance=random.choices([True, False], weights=[5,8], k=1)[0]
+    else:
+        itemchance=True
     if itemchance == True:
         newitem=random.choices(itemlist, weights=[0.5, 0.3, 0.1, 0.1], k=1)[0]
         input("You found a {} on the defeated enemy!".format(newitem))
@@ -66,13 +72,19 @@ def fight():
     enemy=enemychoice.copy()
     input("it's a {}!".format(enemy["name"]))
     while enemy["hel"] > 0:
-        playerturn()
+        escaped=playerturn()
+        if escaped:
+            return
+        if enemy["hel"] <= 0:
+            input("The {} has been defeated!".format(enemy["name"]))
+            grantitem()
+            return
         enemyturn()
 
 def playerturn():
     while True:
-        playerturn=input("Your turn! Will you attack/block/escape?")
-        if playerturn == "attack":
+        playeraction=input("Your turn! Will you attack/block/escape?")
+        if playeraction == "attack":
             enemyblkcheck=random.randint(-1, 1)+(enemy["blk"])
             if enemyblkcheck <= atk:
                 dmgcheck=random.randint(0, 1)+(dmg)
@@ -81,50 +93,53 @@ def playerturn():
                 input("The {} has {} health remaining.".format(enemy["name"], enemy["hel"]))   
             else:
                 input("You missed!")
-            break
-        elif playerturn == "block":
+            return False
+        elif playeraction == "block":
             global blk
-            blk+=1
+            blk += 1
             input("You brace for the {}'s attack, increasing your block chance!".format(enemy["name"]))
-            break
-        elif playerturn == "escape":
+            return False
+        elif playeraction == "escape":
             if random.randint(-1, 1)+(enemy["agi"]) <= agi:
                 input("You successfully escaped the {}!".format(enemy["name"]))
-                return
+                return True
             else:
                 input("You failed to escape!")
-            break
-        if enemy["hel"] <= 0:
-            input("The {} has been defeated!".format(enemy["name"]))
-            grantitem()
-            break
+            return False
+        else:
+            invalid_input()
 
 def enemyturn():
-    if enemy["hel"] > 1:
-        enemyturn=random.choices(["attack", "block"],weights=[10,1])
-        if enemyturn == "attack":
-            blkcheck=random.randint(-1, 1)+(blk)
-            if blkcheck <= enemy["atk"]:
-                global hel
-                enemydmgcheck=random.randint(0, 1)+(enemy["dmg"])
-                hel -= (enemydmgcheck)
-                input("The {} hit you for {} damage!".format(enemy["name"], enemydmgcheck))
-            if hel <= 0:
-                input("You have been defeated by the {}...".format(enemy["name"]))
-                input("Game Over. Press ENTER/RETURN to exit.")
-                exit()
-            else:
-                input("The {} missed!".format(enemy["name"]))
-        elif enemyturn == "block":
-            enemy["blk"]+=1
-            input("The {} braces for your attack, increasing its block chance!".format(enemy["name"]))
-    elif enemy["hel"] == 1:
+    global hel
+    if enemy["hel"] <= 0:
+        return
+    if enemy["hel"] == 1:
         input("The {} is trying to escape!".format(enemy["name"]))
         if random.randint(-3, 1)+(enemy["agi"]) <= agi:
             input("You successfully stopped the {} from escaping!".format(enemy["name"]))
+            return
         else:
             input("The {} escaped!".format(enemy["name"]))
+            enemy["hel"] = 0
+            return
+    enemyaction=random.choices(["attack", "block"], weights=[10,1], k=1)[0]
+    if enemyaction == "attack":
+        blkcheck=random.randint(-1, 1)+(blk)
+        if blkcheck <= enemy["atk"]:
+            enemydmgcheck=random.randint(0, 1)+(enemy["dmg"])
+            hel -= (enemydmgcheck)
+            input("The {} hits you for {} damage!".format(enemy["name"], enemydmgcheck))
+            input("You have {} health remaining.".format(hel))
+            if hel <= 0:
+                input("You have been defeated! Game over.")
+                exit()
+        else:
+            input("The {} missed!".format(enemy["name"]))
+    else:
+        enemy["blk"] += 1
+        input("The {} braces itself for your attack, increasing it's block chance!".format(enemy["name"]))
 
+        
 # player stats (atk=attack success chance, blk=block success chance, agi=escape success chance, hp=health points, dmg=damage)
 atk=1
 blk=1
@@ -134,10 +149,10 @@ dmg=1
 
 # game starts here
 input("Hello, this is a text and probability based fighting game for my python assesment. (press ENTER/RETURN to continue)")
-input("Light. That is all you see, as your mind slowly surfaces from the depths of REM sleep.")
+print("Light. That is all you see, as your mind slowly surfaces from the depths of REM sleep.")
 input("Sitting up, you see that you are seemingly alone in an empty forest.")
-input("Recognizing your surroundings, you remember that you were on your way to a nearby village when bandits ambushed you and knocked you out.")
-input("If you can get to the village, you can get help to defeat the bandits!")
+print("Recognizing your surroundings, you remember that you were on your way to a nearby village when bandits ambushed you and knocked you out.")
+print("If you can get to the village, you can get help to defeat the bandits!")
 input("...After a bit more sitting, perhaps...")
 input("...")
 input(".....")
@@ -146,7 +161,7 @@ while True:
     step1 = input("would you like to take a look around? (yes/no): ").strip().lower()
     if step1 == "yes":
         startitem=random.choices(itemlist, weights=[0.5, 0.3, 0.1, 0.1], k=1)[0]
-        input("As you glance around, you notice a {} lying on the ground.".format(startitem))
+        print("As you glance around, you notice a {} lying on the ground.".format(startitem))
         step2 = input("Equip? (yes/no): ").strip().lower()
         if step2 == "yes":
             equiplist.append(startitem)
@@ -204,8 +219,7 @@ for i in range(events):
                 invalid_input()
         input("After resting for a while, you continue on your way.")
     applyequips()
-    input("You have {} health remaining.".format(hel))
-    input("You have {} events remaining before you reach the village.".format(events-(i+1)))
-    input("After this check of yourself, and where you are, you begin moving again.")
+    print("You have {} health remaining.".format(hel))
+    print("You have {} events remaining before you reach the village.".format(events-(i+1)))
+    print("After this check of yourself, and where you are, you begin moving again.")
     input("After a while more walking, you come across a clearing...")
-
